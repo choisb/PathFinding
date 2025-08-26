@@ -9,7 +9,8 @@
 #include "Grid.h"
 #include "Tile.h"
 #include "Game.h"
-
+#include "PathFindingAlgorithm.h"
+#include "PathMarker.h"
 #include <algorithm>
 
 Grid::Grid(const std::shared_ptr<Game>& game)
@@ -28,7 +29,7 @@ Grid::Grid(const std::shared_ptr<Game>& game)
 	{
 		for (size_t y = 0; y < mNumRows; ++y)
 		{
-			std::shared_ptr<Tile> NewTile = game->CreateActor<Tile>(game);
+			std::shared_ptr<Tile> NewTile = game->CreateActor<Tile>();
 			mTiles[x][y] = NewTile;
 			NewTile->SetPosition(GetPosition() + Vector2(mTileSize * 0.5f + x * mTileSize, y * mTileSize));
 			NewTile->SetSize(Vector2(mTileSize, mTileSize));
@@ -89,7 +90,10 @@ void Grid::HandleMouseMove(int x, int y)
 	{
 	case TileState::Default:
 	case TileState::Wall:
-		selectTile->SetTileState(capturedTile->GetTileState());
+		if (selectTile->GetTileState() != TileState::Start && selectTile->GetTileState() != TileState::End)
+		{
+			selectTile->SetTileState(capturedTile->GetTileState());
+		}
 		break;
 
 	case TileState::Start:
@@ -107,6 +111,25 @@ void Grid::HandleMouseMove(int x, int y)
 void Grid::HandleMouseUp(int x, int y)
 {
 	mCapturedTile.reset();
+}
+
+void Grid::HandleKeyUp(SDL_Keycode keyCode)
+{
+	if (bDirtyPath == false)
+	{
+		switch (keyCode)
+		{
+		case SDLK_a:
+		{
+			std::vector<std::vector<Tile*>> tileRawPtr = GetTileRawPtr();
+			path = AStar::PathFinding(tileRawPtr);
+			bDirtyPath = true;
+		}
+		break;
+		case SDLK_j:
+			break;
+		}
+	}
 }
 
 std::shared_ptr<Tile> Grid::GetSelectTile(int x, int y)
@@ -129,10 +152,51 @@ std::shared_ptr<Tile> Grid::GetSelectTile(int x, int y)
 	return std::shared_ptr<Tile>();
 }
 
+std::vector<std::vector<Tile*>> Grid::GetTileRawPtr()
+{
+	std::vector<std::vector<Tile*>> tileRaw;
+	tileRaw.resize(mTiles.size());
+
+	for (size_t x = 0; x < mTiles.size(); ++x)
+	{
+		tileRaw[x].resize(mTiles[x].size());
+		for (size_t y = 0; y < mTiles[x].size(); ++y)
+		{
+			tileRaw[x][y] = mTiles[x][y].lock().get();
+		}
+	}
+	return tileRaw;
+}
+
+void Grid::UpdatePath()
+{
+	for (std::weak_ptr<PathMarker> pathMarker : mPathMarkers)
+	{
+		if (std::shared_ptr<PathMarker> sharedPathMarker = pathMarker.lock())
+		{
+			sharedPathMarker->SetState(Actor::EDead);
+		}
+	}
+
+	mPathMarkers.resize(0);
+	for (Tile* pathTile : path)
+	{
+		std::shared_ptr<PathMarker> pathMarker = GetGame().lock()->CreateActor<PathMarker>();
+		pathMarker->SetPosition(pathTile->GetPosition());
+		mPathMarkers.push_back(pathMarker);
+	}
+}
+
 void Grid::UpdateActor(float deltaTime)
 {
 	Actor::UpdateActor(deltaTime);
+	if (bDirtyPath)
+	{
+		bDirtyPath = false;
+		UpdatePath();
+	}
 }
+
 
 std::shared_ptr<Tile> Grid::GetTile(Vector2 pos)
 {

@@ -8,10 +8,12 @@
 
 #pragma once
 #include "Actor.h"
+#include "SDL/SDL_Keycode.h"
 #include <vector>
 
 class Game;
 class Tile;
+class PathMarker;
 
 class Grid : public Actor
 {
@@ -21,15 +23,23 @@ public:
 	void HandleMouseDown(int x, int y);
 	void HandleMouseMove(int x, int y);
 	void HandleMouseUp(int x, int y);
+	void HandleKeyUp(SDL_Keycode keyCode);
 
-	void UpdateActor(float deltaTime) override;
+	virtual void UpdateActor(float deltaTime) override;
+
 	std::shared_ptr<Tile> GetTile(Vector2 pos);
 	std::shared_ptr<Tile> GetTile(size_t x, size_t y);
 
 private:
 	std::shared_ptr<Tile> GetSelectTile(int x, int y);
+	std::vector<std::vector<Tile*>> GetTileRawPtr();
+	void UpdatePath();
+
 	std::weak_ptr<Tile> mCapturedTile;
 	std::vector<std::vector<std::weak_ptr<Tile>>> mTiles;
+	std::vector<Tile*> path;
+	std::vector<std::weak_ptr<PathMarker>> mPathMarkers;
+
 	
 	const size_t mNumCols = 32;
 	const size_t mNumRows = 20;
@@ -37,4 +47,5 @@ private:
 
 	Vector2 mStartPos {4,9};
 	Vector2 mEndPos {26,9};
+	bool bDirtyPath = false;
 };

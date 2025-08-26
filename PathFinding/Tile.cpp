@@ -18,7 +18,7 @@ Tile::Tile(const std::shared_ptr<Game>& game)
 
 void Tile::Initialize()
 {
-	mSprite = CreateComponent<SpriteComponent>(shared_from_this());
+	mSprite = CreateComponent<SpriteComponent>();
 	UpdateTexture();
 }
 

@@ -11,7 +11,7 @@
 
 int main(int argc, char** argv)
 {
-	std::shared_ptr<Game> game = std::make_shared<Game>();
+	std::shared_ptr<Game> game = Game::Get();
 	bool success = game->Initialize();
 	if (success)
 	{

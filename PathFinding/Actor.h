@@ -33,7 +33,7 @@ public:
 	{
 		static_assert(std::is_base_of<Component, T>::value, "Template argument T must be a derived class from the Component class");
 
-		std::shared_ptr<T> component = std::make_shared<T>(std::forward<Param>(_Args)...);
+		std::shared_ptr<T> component = std::make_shared<T>(shared_from_this(), std::forward<Param>(_Args)...);
 		AddComponent(std::static_pointer_cast<Component>(component));
 		component->Initialize();
 		return component;

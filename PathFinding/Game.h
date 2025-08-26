@@ -21,6 +21,7 @@ class Grid;
 class Game : public std::enable_shared_from_this<Game>
 {
 public:
+	static std::shared_ptr<Game> Get();
 	Game();
 	bool Initialize();
 	void RunLoop();
@@ -31,7 +32,7 @@ public:
 	{
 		static_assert(std::is_base_of<Actor, T>::value, "Template argument T must be a derived class from the Actor class");
 
-		std::shared_ptr<T> actor = std::make_shared<T>(std::forward<Param>(_Args)...);
+		std::shared_ptr<T> actor = std::make_shared<T>(shared_from_this(), std::forward<Param>(_Args)...);
 		AddActor(std::static_pointer_cast<Actor>(actor));
 		actor->Initialize();
 		return actor;

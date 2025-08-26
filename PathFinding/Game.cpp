@@ -13,6 +13,16 @@
 #include "SpriteComponent.h"
 #include "Grid.h"
 
+std::shared_ptr<Game> Game::Get()
+{
+	static std::shared_ptr<Game> instance;
+	if (instance == nullptr)
+	{
+		instance = std::make_shared<Game>();
+	}
+	return instance;
+}
+
 Game::Game()
 	: mWindow(nullptr)
 	, mRenderer(nullptr)
@@ -99,6 +109,13 @@ void Game::ProcessInput()
 				mGrid->HandleMouseUp(event.button.x, event.button.y);
 			}
 			break;
+
+		case SDL_KEYUP:
+			if (mGrid)
+			{
+				mGrid->HandleKeyUp(event.key.keysym.sym);
+			}
+			break;
 		}
 	}
 	
@@ -168,7 +185,7 @@ void Game::GenerateOutput()
 
 void Game::LoadData()
 {
-	mGrid = std::make_shared<Grid>(shared_from_this());
+	mGrid = CreateActor<Grid>();
 }
 
 void Game::UnloadData()

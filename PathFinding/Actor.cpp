@@ -18,12 +18,10 @@ Actor::Actor(const std::shared_ptr<Game>& game)
 	, mRotation(0.0f)
 	, mGame(game)
 {
-
 }
 
 Actor::~Actor()
 {
-
 }
 
 void Actor::Update(float deltaTime)
