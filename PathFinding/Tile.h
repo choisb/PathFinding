@@ -28,23 +28,11 @@ public:
 	
 	virtual void Initialize() override;
 
-	const std::shared_ptr<Tile> GetParent() const { return mParent.lock(); }
-	void AddAdjacent(const std::weak_ptr<Tile>& adjacent);
-
 	void SetSize(Vector2 size);
 	void SetTileState(TileState state);
 	TileState GetTileState() const { return mTileState; }
 
 private:
-	std::vector<std::weak_ptr<Tile>> mAdjacent;
-	std::weak_ptr<Tile> mParent;
-	float f;
-	float g;
-	float h;
-	bool mInOpenSet;
-	bool mInClosedSet;
-	bool mBlocked;
-	
 	void UpdateTexture();
 	std::weak_ptr<SpriteComponent> mSprite;
 	TileState mTileState;

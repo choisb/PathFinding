@@ -12,16 +12,8 @@
 
 Tile::Tile(const std::shared_ptr<Game>& game)
 	: Actor(game)
-	, f(0.0f)
-	, g(0.0f)
-	, h(0.0f)
-	, mInOpenSet(false)
-	, mInClosedSet(false)
-	, mBlocked(false)
-	, mTileState(TileState::Default)
-	
+	, mTileState(TileState::Default)	
 {
-
 }
 
 void Tile::Initialize()
@@ -29,13 +21,6 @@ void Tile::Initialize()
 	mSprite = CreateComponent<SpriteComponent>(shared_from_this());
 	UpdateTexture();
 }
-
-
-void Tile::AddAdjacent(const std::weak_ptr<Tile>& adjacent)
-{
-	mAdjacent.push_back(adjacent);
-}
-
 
 void Tile::UpdateTexture()
 {

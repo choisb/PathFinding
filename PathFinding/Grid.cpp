@@ -42,52 +42,6 @@ Grid::Grid(const std::shared_ptr<Game>& game)
 	{
 		startTile->SetTileState(TileState::Start);
 		endTile->SetTileState(TileState::End);
-	
-		for (size_t i = 0; i < mNumRows; i++)
-		{
-			for (size_t j = 0; j < mNumCols; j++)
-			{
-				std::shared_ptr<Tile> tile = mTiles[i][j].lock();
-				if (tile == nullptr)
-				{
-					continue;
-				}
-
-				if (i > 0)
-				{
-					tile->AddAdjacent(mTiles[i-1][j]);
-				}
-				if (i < mNumRows - 1)
-				{
-					tile->AddAdjacent(mTiles[i+1][j]);
-				}
-				if (j > 0)
-				{
-					tile->AddAdjacent(mTiles[i][j-1]);
-				}
-				if (j < mNumCols - 1)
-				{
-					tile->AddAdjacent(mTiles[i][j+1]);
-				}
-
-				if (i > 0 && j > 0)
-				{
-					tile->AddAdjacent(mTiles[i - 1][j-1]);
-				}
-				if (i > 0 && j < mNumCols - 1)
-				{
-					tile->AddAdjacent(mTiles[i - 1][j + 1]);
-				}
-				if (i < mNumRows - 1 && j > 0)
-				{
-					tile->AddAdjacent(mTiles[i + 1][j - 1]);
-				}
-				if (i < mNumRows - 1 && j < mNumCols - 1)
-				{
-					tile->AddAdjacent(mTiles[i + 1][j + 1]);
-				}
-			}
-		}
 	}
 }
 
