@@ -31,8 +31,8 @@ private:
 	std::weak_ptr<Tile> mCapturedTile;
 	std::vector<std::vector<std::weak_ptr<Tile>>> mTiles;
 	
-	const size_t mNumRows = 20;
 	const size_t mNumCols = 32;
+	const size_t mNumRows = 20;
 	const float mTileSize = 32.0f;
 
 	Vector2 mStartPos {4,9};

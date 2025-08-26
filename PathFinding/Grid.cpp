@@ -17,20 +17,20 @@ Grid::Grid(const std::shared_ptr<Game>& game)
 {
 	SetPosition(Vector2(0.f, 100.0f));
 
-	mTiles.resize(mNumRows);
+	mTiles.resize(mNumCols);
 	for (size_t i = 0; i < mTiles.size(); i++)
 	{
-		mTiles[i].resize(mNumCols);
+		mTiles[i].resize(mNumRows);
 	}
 	
 	// Create tiles
-	for (size_t i = 0; i < mNumRows; i++)
+	for (size_t x = 0; x < mNumCols; ++x)
 	{
-		for (size_t j = 0; j < mNumCols; j++)
+		for (size_t y = 0; y < mNumRows; ++y)
 		{
 			std::shared_ptr<Tile> NewTile = game->CreateActor<Tile>(game);
-			mTiles[i][j] = NewTile;
-			NewTile->SetPosition(GetPosition() + Vector2(mTileSize * 0.5f + j * mTileSize, i * mTileSize));
+			mTiles[x][y] = NewTile;
+			NewTile->SetPosition(GetPosition() + Vector2(mTileSize * 0.5f + x * mTileSize, y * mTileSize));
 			NewTile->SetSize(Vector2(mTileSize, mTileSize));
 		}
 	}
@@ -141,9 +141,9 @@ std::shared_ptr<Tile> Grid::GetTile(Vector2 pos)
 
 std::shared_ptr<Tile> Grid::GetTile(size_t x, size_t y)
 {
-	if (mTiles.size() > y && mTiles[y].size() > x)
+	if (mTiles.size() > x && mTiles[x].size() > y)
 	{
-		return mTiles[y][x].lock();
+		return mTiles[x][y].lock();
 	}
 	else
 	{
