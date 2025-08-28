@@ -12,7 +12,15 @@ void OpenSetMarker::Initialize()
 {
 	mSprite = CreateComponent<SpriteComponent>(150);
 	mSprite.lock()->SetTexture(GetGame().lock()->GetTexture(std::string("../Assets/OpenSetMarker.png")));
-	SetScale(0.5f);
+	SetScale(0.75f);
+}
+
+void OpenSetMarker::SetVisible(bool visible)
+{
+	if (mSprite.lock())
+	{
+		mSprite.lock()->SetVisible(visible);
+	}
 }
 
 CloseSetMarker::CloseSetMarker(const std::shared_ptr<Game>& game)
@@ -24,5 +32,13 @@ void CloseSetMarker::Initialize()
 {
 	mSprite = CreateComponent<SpriteComponent>(150);
 	mSprite.lock()->SetTexture(GetGame().lock()->GetTexture(std::string("../Assets/CloseSetMarker.png")));
-	SetScale(0.5f);
+	SetScale(0.75f);
+}
+
+void CloseSetMarker::SetVisible(bool visible)
+{
+	if (mSprite.lock())
+	{
+		mSprite.lock()->SetVisible(visible);
+	}
 }

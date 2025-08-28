@@ -127,7 +127,29 @@ void Grid::HandleKeyUp(SDL_Keycode keyCode)
 		}
 		break;
 		case SDLK_j:
-			break;
+		{
+			std::vector<std::vector<Tile*>> tileRawPtr = GetTileRawPtr();
+			path = JPS::PathFinding(tileRawPtr);
+			bDirtyPath = true;
+		}
+		break;
+		case SDLK_c:
+		{
+			for (size_t x = 0; x < mTiles.size(); ++x)
+			{
+				for (size_t y = 0; y < mTiles[x].size(); ++y)
+				{
+					if (std::shared_ptr<Tile> tile = mTiles[x][y].lock())
+					{
+						if (tile->GetTileState() == TileState::Wall)
+						{
+							tile->SetTileState(TileState::Default);
+						}
+					}
+				}
+			}
+		}
+		break;
 		}
 	}
 }
@@ -196,7 +218,6 @@ void Grid::UpdateActor(float deltaTime)
 		UpdatePath();
 	}
 }
-
 
 std::shared_ptr<Tile> Grid::GetTile(Vector2 pos)
 {

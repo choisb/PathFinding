@@ -15,6 +15,7 @@ SpriteComponent::SpriteComponent(const std::shared_ptr<Actor>& owner, int drawOr
 	, mTexture(nullptr)
 	, mDrawOrder(drawOrder)
 	, mSize(32.0f, 32.0f)
+	, bVisible(true)
 {
 
 }
@@ -22,6 +23,11 @@ SpriteComponent::SpriteComponent(const std::shared_ptr<Actor>& owner, int drawOr
 
 void SpriteComponent::Draw(SDL_Renderer* renderer)
 {
+	if (bVisible == false)
+	{
+		return;
+	}
+
 	std::shared_ptr<Actor> owner = mOwner.lock();
 	if (owner == nullptr)
 	{

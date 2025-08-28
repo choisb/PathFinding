@@ -60,6 +60,17 @@ namespace Math
 		return Min(upper, Max(lower, value));
 	}
 
+	template <typename T>
+	inline T Sign(const T& value)
+	{
+		return (value > 0) - (value < 0);
+	}
+
+	inline int Abs(int value)
+	{
+		return abs(value);
+	}
+
 	inline float Abs(float value)
 	{
 		return fabs(value);
@@ -109,7 +120,109 @@ namespace Math
 	{
 		return fmod(numer, denom);
 	}
+
 }
+class Coord
+{
+public:
+	int x;
+	int y;
+
+	Coord()
+		: x(0)
+		, y(0)
+	{}
+
+	explicit Coord(int inX, int inY)
+		: x(inX)
+		, y(inY)
+	{}
+
+	explicit Coord(float inX, float inY)
+		: Coord(static_cast<int>(inX), static_cast<int>(inY))
+	{}
+	void Set(int inX, int inY)
+	{
+		x = inX;
+		y = inY;
+	}
+
+	friend Coord operator+(const Coord& a, const Coord& b)
+	{
+		return Coord(a.x + b.x, a.y + b.y);
+	}
+
+	friend Coord operator-(const Coord& a, const Coord& b)
+	{
+		return Coord(a.x - b.x, a.y - b.y);
+	}
+
+	friend Coord operator*(const Coord& a, const Coord& b)
+	{
+		return Coord(a.x * b.x, a.y * b.y);
+	}
+
+	friend Coord operator*(const Coord& coord, float scalar)
+	{
+		return Coord(coord.x * scalar, coord.y * scalar);
+	}
+
+	friend Coord operator*(const Coord& coord, int scalar)
+	{
+		return Coord(coord.x * scalar, coord.y * scalar);
+	}
+
+	friend Coord operator*(int scalar, const Coord& coord)
+	{
+		return Coord(coord.x * scalar, coord.y * scalar);
+	}
+
+	Coord& operator*=(int scalar)
+	{
+		x *= scalar;
+		y *= scalar;
+		return *this;
+	}
+
+	Coord& operator+=(const Coord& right)
+	{
+		x += right.x;
+		y += right.y;
+		return *this;
+	}
+
+	Coord& operator-=(const Coord& right)
+	{
+		x -= right.x;
+		y -= right.y;
+		return *this;
+	}
+
+	int LengthSq() const
+	{
+		return (x * x + y * y);
+	}
+
+	float Length() const
+	{
+		return (Math::Sqrt(static_cast<float>(LengthSq())));
+	}
+
+	static const Coord Zero;
+	static const Coord UnitX;
+	static const Coord UnitY;
+	static const Coord NegUnitX;
+	static const Coord NegUnitY;
+
+	static const Coord Up;
+	static const Coord Right;
+	static const Coord Down;
+	static const Coord Left;
+	static const Coord UpRight;
+	static const Coord DownRight;
+	static const Coord DownLeft;
+	static const Coord UpLeft;
+};
 
 // 2D Vector
 class Vector2

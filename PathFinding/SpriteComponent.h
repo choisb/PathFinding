@@ -23,12 +23,14 @@ public:
 	virtual void Initialize() override;
 
 	void SetSize(Vector2 size) { mSize = size; }
-
 	Vector2 GetSize() const { return mSize; }
+	void SetVisible(bool visible) { bVisible = visible; }
+
 	int GetDrawOrder() const { return mDrawOrder; }
 
 private:
 	SDL_Texture* mTexture;
 	int mDrawOrder;
 	Vector2 mSize;
+	bool bVisible;
 };

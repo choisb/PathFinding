@@ -8,6 +8,21 @@
 
 #include "Math.h"
 
+const Coord Coord::Zero(0, 0);
+const Coord Coord::UnitX(1, 0);
+const Coord Coord::UnitY(0, 1);
+const Coord Coord::NegUnitX(-1, 0);
+const Coord Coord::NegUnitY(0, -1);
+
+const Coord Coord::Up(0, -1);
+const Coord Coord::Right(1, 0);
+const Coord Coord::Down(0, 1);
+const Coord Coord::Left(-1, 0);
+const Coord Coord::UpRight(1, -1);
+const Coord Coord::DownRight(1, 1);
+const Coord Coord::DownLeft(-1, 1);
+const Coord Coord::UpLeft(-1, -1);
+
 const Vector2 Vector2::Zero(0.0f, 0.0f);
 const Vector2 Vector2::UnitX(1.0f, 0.0f);
 const Vector2 Vector2::UnitY(0.0f, 1.0f);
